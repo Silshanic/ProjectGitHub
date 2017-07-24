@@ -55,7 +55,10 @@ class IsoscelesTriangle(Triangle):
             sin = abs((p1.y - p2.y) / 2) / ah
             c_x = sin * ch
             c_y = ((ch * ch) - (c_x * c_x))**(.5)
-            p3 = Point(h_x + c_x, h_y + c_y)
+            if p1.y > p2.y:
+                p3 = Point(h_x + c_x, h_y + c_y)
+            else:
+                p3 = Point(h_x - c_x, h_y + c_y)
         super().__init__(p1, p2, p3)
 
 
@@ -74,3 +77,8 @@ class Square(Rectangle):
         r_u = Point(p.x + l, p.y + l)
         super().__init__(l_d, r_u)
 
+p1 = Point(1, 0)
+p2 = Point(7, 4)
+l = 5
+it = IsoscelesTriangle(p1, p2, l)
+print(it.points[2].x, it.points[2].y)
