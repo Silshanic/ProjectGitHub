@@ -76,9 +76,3 @@ class Square(Rectangle):
         l_d = p
         r_u = Point(p.x + l, p.y + l)
         super().__init__(l_d, r_u)
-
-p1 = Point(1, 0)
-p2 = Point(7, 4)
-l = 5
-it = IsoscelesTriangle(p1, p2, l)
-print(it.points[2].x, it.points[2].y)
