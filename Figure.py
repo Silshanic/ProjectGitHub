@@ -11,12 +11,6 @@ class Point(Figure):
     def __repr__(self):
         return 'Point(%s, %s)' % (self.x, self.y)
 
-    def __add__(self, other):
-        return Point(self.x + other.x, self.y + other.y)
-
-    def __sub__(self, other):
-        return Point(self.x - other.x, self.y - other.y)
-
     def __mul__(self, n):
         return Point(self.x * n, self.y * n)
 
@@ -47,6 +41,17 @@ class Line(Polygon):
 
     def __init__(self, p1, p2):
         super().__init__(p1, p2)
+        self.center = Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2)
+
+    def __add__(self, v):
+        coord_v1 = Point(self.points[1].x - self.points[0].x, self.points[1].y - self.points[0].y)
+        coord_v2 = Point(v.points[1].x - v.points[0].x, v.points[1].y - v.points[0].y)
+        return Line(self.points[0], Point(self.points[0].x + coord_v1.x + coord_v2.x, self.points[0].y + coord_v1.y + coord_v2.y))
+
+    def __sub__(self, v):
+        coord_v1 = Point(self.points[1].x - self.points[0].x, self.points[1].y - self.points[0].y)
+        coord_v2 = Point(v.points[1].x - v.points[0].x, v.points[1].y - v.points[0].y)
+        return Line(self.points[0], Point(self.points[0].x + coord_v1.x - coord_v2.x, self.points[0].y + coord_v1.y - coord_v2.y))
 
     def __abs__(self):
         return ((self.points[0].x - self.points[1].x)**(2) + (self.points[0].y - self.points[1].y)**(2))**(.5)
@@ -61,7 +66,7 @@ class Triangle(Polygon):
 class IsoscelesTriangle(Triangle):
 
     def __init__(self, p1, p2, l):
-        center = (p1 + p2) / 2
+        center = Line(p1, p2).center
         ah = abs(Line(p1, center))
         ch = ((l*l) - (ah * ah))**(.5)
         if p1.x == p2.x:
@@ -72,7 +77,7 @@ class IsoscelesTriangle(Triangle):
             sin = abs((p1.y - p2.y) / 2) / ah
             c = Point(sin * ch, ((ch * ch) - ((sin * ch) ** 2))**(.5))
             if p1.y > p2.y:
-                p3 = center + c
+                p3 = Point(center.x + c.x, center.y + c.y)
             else:
                 p3 = Point(center.x - c.x, center.y + c.y)
         super().__init__(p1, p2, p3)
@@ -92,5 +97,6 @@ class Square(Rectangle):
         l_d = p
         r_u = Point(p.x + l, p.y + l)
         super().__init__(l_d, r_u)
+
 
 
