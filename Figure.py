@@ -44,14 +44,10 @@ class Line(Polygon):
         self.center = Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2)
 
     def __add__(self, v):
-        coord_v1 = Point(self.points[1].x - self.points[0].x, self.points[1].y - self.points[0].y)
-        coord_v2 = Point(v.points[1].x - v.points[0].x, v.points[1].y - v.points[0].y)
-        return Line(self.points[0], Point(self.points[0].x + coord_v1.x + coord_v2.x, self.points[0].y + coord_v1.y + coord_v2.y))
+        return Line(self.points[0], Point(self.points[0].x + self.points[1].x - self.points[0].x + v.points[1].x - v.points[0].x, self.points[0].y + self.points[1].y - self.points[0].y + v.points[1].y - v.points[0].y))
 
     def __sub__(self, v):
-        coord_v1 = Point(self.points[1].x - self.points[0].x, self.points[1].y - self.points[0].y)
-        coord_v2 = Point(v.points[1].x - v.points[0].x, v.points[1].y - v.points[0].y)
-        return Line(self.points[0], Point(self.points[0].x + coord_v1.x - coord_v2.x, self.points[0].y + coord_v1.y - coord_v2.y))
+        return Line(self.points[0], Point(self.points[0].x + self.points[1].x - self.points[0].x - v.points[1].x + v.points[0].x, self.points[0].y + self.points[1].y - self.points[0].y - v.points[1].y + v.points[0].y))
 
     def __abs__(self):
         return ((self.points[0].x - self.points[1].x)**(2) + (self.points[0].y - self.points[1].y)**(2))**(.5)
@@ -97,6 +93,4 @@ class Square(Rectangle):
         l_d = p
         r_u = Point(p.x + l, p.y + l)
         super().__init__(l_d, r_u)
-
-
 
