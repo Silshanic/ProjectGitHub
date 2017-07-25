@@ -8,6 +8,21 @@ class Point(Figure):
         self.x = x
         self.y = y
 
+    def __repr__(self):
+        return 'Point(%s, %s)' % (self.x, self.y)
+
+    def __add__(self, other):
+        return Point(self.x + other.x, self.y + other.y)
+
+    def __sub__(self, other):
+        return Point(self.x - other.x, self.y - other.y)
+
+    def __mul__(self, n):
+        return Point(self.x * n, self.y * n)
+
+    def __truediv__(self, n):
+        return Point(self.x / n, self.y / n)
+
 
 class Circle(Point):
 
@@ -33,6 +48,9 @@ class Line(Polygon):
     def __init__(self, p1, p2):
         super().__init__(p1, p2)
 
+    def __abs__(self):
+        return ((self.points[0].x - self.points[1].x)**(2) + (self.points[0].y - self.points[1].y)**(2))**(.5)
+
 
 class Triangle(Polygon):
 
@@ -43,22 +61,20 @@ class Triangle(Polygon):
 class IsoscelesTriangle(Triangle):
 
     def __init__(self, p1, p2, l):
-        h_x = (p1.x + p2.x) / 2 # X координата середины
-        h_y = (p1.y + p2.y) / 2 # Y координата середины
-        ah = ((p1.x - h_x)**(2) + (p1.y - h_y)**(2))**(.5) # Длина половины основания
-        ch = ((l*l) - (ah * ah))**(.5) # Длина высоты
+        center = (p1 + p2) / 2
+        ah = abs(Line(p1, center))
+        ch = ((l*l) - (ah * ah))**(.5)
         if p1.x == p2.x:
-            p3 = Point(h_x + ch, h_y)
+            p3 = Point(center.x + ch, center.y)
         elif p1.y == p2.y:
-            p3 = Point(h_x, h_y + ch)
+            p3 = Point(center.x, center.y + ch)
         else:
             sin = abs((p1.y - p2.y) / 2) / ah
-            c_x = sin * ch
-            c_y = ((ch * ch) - (c_x * c_x))**(.5)
+            c = Point(sin * ch, ((ch * ch) - ((sin * ch) ** 2))**(.5))
             if p1.y > p2.y:
-                p3 = Point(h_x + c_x, h_y + c_y)
+                p3 = center + c
             else:
-                p3 = Point(h_x - c_x, h_y + c_y)
+                p3 = Point(center.x - c.x, center.y + c.y)
         super().__init__(p1, p2, p3)
 
 
@@ -76,3 +92,5 @@ class Square(Rectangle):
         l_d = p
         r_u = Point(p.x + l, p.y + l)
         super().__init__(l_d, r_u)
+
+
