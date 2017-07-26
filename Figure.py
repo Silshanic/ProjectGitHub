@@ -24,17 +24,26 @@ class Circle(Point):
         super().__init__(x, y)
         self.r = r
 
+    def __repr__(self):
+        return 'Circle(%s, %s, %s)' % (self.x, self.y, self.r)
+
 
 class CTriangle(Circle):
 
     def __init__(self, x, y, r):
         super().__init__(x, y, r)
 
+    def __repr__(self):
+        return 'CTriangle(%s, %s, %s)' % (self.x, self.y, self.r)
+
 
 class Polygon(Figure):
 
     def __init__(self, *points):
         self.points = points
+
+    def __repr__(self):
+        return '%s%s' % (self.__class__.__name__, self.points)
 
 
 class Line(Polygon):
@@ -93,4 +102,3 @@ class Square(Rectangle):
         l_d = p
         r_u = Point(p.x + l, p.y + l)
         super().__init__(l_d, r_u)
-
