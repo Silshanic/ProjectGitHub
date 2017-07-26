@@ -1,3 +1,6 @@
+import math
+
+
 class Figure:
     pass
 
@@ -102,3 +105,14 @@ class Square(Rectangle):
         l_d = p
         r_u = Point(p.x + l, p.y + l)
         super().__init__(l_d, r_u)
+
+
+class EquilateralPolygon(Polygon):
+
+    def __init__(self, center_point, r, vertices):
+        points = []
+        for n in range(vertices):
+            angle = (360 / vertices) * n
+            points.append(Point(center_point.x + round(math.cos(math.radians(angle)) * r, 8), center_point.y + round(math.sin(math.radians(angle)) * r, 8)))
+        super().__init__(*points)
+
