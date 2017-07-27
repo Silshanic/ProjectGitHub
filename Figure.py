@@ -12,7 +12,7 @@ class Point(Figure):
         self.y = y
 
     def __repr__(self):
-        return 'Point(%s, %s)' % (self.x, self.y)
+        return 'Point({}, {})'.format(self.x, self.y)
 
     def __mul__(self, n):
         return Point(self.x * n, self.y * n)
@@ -28,7 +28,7 @@ class Circle(Point):
         self.r = r
 
     def __repr__(self):
-        return 'Circle(%s, %s, %s)' % (self.x, self.y, self.r)
+        return 'Circle({}, {}, {})'.format(self.x, self.y, self.r)
 
 
 class CTriangle(Circle):
@@ -37,7 +37,7 @@ class CTriangle(Circle):
         super().__init__(x, y, r)
 
     def __repr__(self):
-        return 'CTriangle(%s, %s, %s)' % (self.x, self.y, self.r)
+        return 'CTriangle({}, {}, {})'.format(self.x, self.y, self.r)
 
 
 class Polygon(Figure):
@@ -46,7 +46,7 @@ class Polygon(Figure):
         self.points = points
 
     def __repr__(self):
-        return '%s%s' % (self.__class__.__name__, self.points)
+        return '{}{}'.format(self.__class__.__name__, self.points)
 
 
 class Line(Polygon):
