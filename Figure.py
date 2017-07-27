@@ -111,8 +111,10 @@ class EquilateralPolygon(Polygon):
 
     def __init__(self, center_point, r, vertices):
         points = []
+        angles = 360 / vertices
         for n in range(vertices):
-            angle = (360 / vertices) * n
+            angle = angles * n
             points.append(Point(center_point.x + round(math.cos(math.radians(angle)) * r, 8), center_point.y + round(math.sin(math.radians(angle)) * r, 8)))
         super().__init__(*points)
+
 
