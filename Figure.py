@@ -8,11 +8,11 @@ class Figure:
 class Point(Figure):
 
     def __init__(self, x, y):
-        self.x = x
-        self.y = y
+        self.x = round(x)
+        self.y = round(y)
 
     def __repr__(self):
-        return 'Point({}, {})'.format(self.x, self.y)
+        return '<Point(x=[{0}], y=[{1}]) figure>'.format(self.x, self.y)
 
     def __mul__(self, n):
         return Point(self.x * n, self.y * n)
@@ -28,16 +28,7 @@ class Circle(Point):
         self.r = r
 
     def __repr__(self):
-        return 'Circle({}, {}, {})'.format(self.x, self.y, self.r)
-
-
-class CTriangle(Circle):
-
-    def __init__(self, x, y, r):
-        super().__init__(x, y, r)
-
-    def __repr__(self):
-        return 'CTriangle({}, {}, {})'.format(self.x, self.y, self.r)
+        return '<Circle(x=[{0}], y=[{1}], r=[{2}]) figure>'.format(self.x, self.y, self.r)
 
 
 class Polygon(Figure):
@@ -46,7 +37,7 @@ class Polygon(Figure):
         self.points = points
 
     def __repr__(self):
-        return '{}{}'.format(self.__class__.__name__, self.points)
+        return '<{0}{1} figure>'.format(self.__class__.__name__, self.points)
 
 
 class Line(Polygon):
@@ -114,7 +105,7 @@ class EquilateralPolygon(Polygon):
         angles = 360 / vertices
         for n in range(vertices):
             angle = angles * n
-            points.append(Point(center_point.x + round(math.cos(math.radians(angle)) * r), center_point.y + round(math.sin(math.radians(angle)) * r)))
+            points.append(Point(center_point.x + math.cos(math.radians(angle)) * r, center_point.y + math.sin(math.radians(angle)) * r))
         super().__init__(*points)
 
 
