@@ -12,7 +12,7 @@ class Point(Figure):
         self.y = round(y)
 
     def __repr__(self):
-        return '<Point(x=[{0}], y=[{1}]) figure>'.format(self.x, self.y)
+        return '<Point(x={0}, y={1}) figure>'.format(self.x, self.y)
 
     def __mul__(self, n):
         return Point(self.x * n, self.y * n)
@@ -28,7 +28,7 @@ class Circle(Point):
         self.r = r
 
     def __repr__(self):
-        return '<Circle(x=[{0}], y=[{1}], r=[{2}]) figure>'.format(self.x, self.y, self.r)
+        return '<Circle(x={0}, y={1}, r={2}) figure>'.format(self.x, self.y, self.r)
 
 
 class Polygon(Figure):
