@@ -1,4 +1,5 @@
 import math
+import pygame
 
 
 class Figure:
@@ -20,6 +21,9 @@ class Point(Figure):
     def __truediv__(self, n):
         return Point(self.x / n, self.y / n)
 
+    def draw(self):
+        pygame.draw.circle(gameDisplay, BLACK, (self.x, self.y), 1)
+
 
 class Circle(Point):
 
@@ -30,6 +34,9 @@ class Circle(Point):
     def __repr__(self):
         return '<Circle(x={0}, y={1}, r={2}) figure>'.format(self.x, self.y, self.r)
 
+    def draw(self):
+        pygame.draw.circle(gameDisplay, BLACK, (self.x, self.y), self.r)
+
 
 class Polygon(Figure):
 
@@ -38,6 +45,13 @@ class Polygon(Figure):
 
     def __repr__(self):
         return '<{0}{1} figure>'.format(self.__class__.__name__, self.points)
+
+    def draw(self):
+        point = [[0 for j in range(2)] for i in range(len(self.points))]
+        for i in range(len(self.points)):
+            point[i][0] = self.points[i].x
+            point[i][1] = self.points[i].y
+        pygame.draw.polygon(gameDisplay, BLACK, [point[i] for i in range(len(point))])
 
 
 class Line(Polygon):
@@ -54,6 +68,9 @@ class Line(Polygon):
 
     def __abs__(self):
         return ((self.points[0].x - self.points[1].x)**(2) + (self.points[0].y - self.points[1].y)**(2))**(.5)
+
+    def draw(self):
+        pygame.draw.line(gameDisplay, BLACK, [self.points[0].x, self.points[0].y], [self.points[1].x, self.points[1].y])
 
 
 class Triangle(Polygon):
@@ -108,4 +125,41 @@ class EquilateralPolygon(Polygon):
             points.append(Point(center_point.x + math.cos(math.radians(angle)) * r, center_point.y + math.sin(math.radians(angle)) * r))
         super().__init__(*points)
 
+
+pygame.init()
+
+display_width = 800
+display_height = 600
+
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+
+gameDisplay = pygame.display.set_mode((display_width, display_height))
+pygame.display.set_caption('Game')
+clock = pygame.time.Clock()
+
+
+def game_loop():
+
+    gameExit = False
+
+    while not gameExit:
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                gameExit = True
+
+        gameDisplay.fill(WHITE)
+
+        p1 = Point(100, 200)
+        p2 = Point(200, 300)
+        p1.draw()
+        p2.draw()
+        Line(p1, p2).draw()
+
+        pygame.display.update()
+        clock.tick(60)
+
+game_loop()
+pygame.quit()
 
