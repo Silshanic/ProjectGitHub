@@ -1,9 +1,11 @@
 import math
-import pygame
+from pygame import draw
 
 
 class Figure:
-    pass
+
+    def draw(self, game_display, color):
+        raise NotImplementedError
 
 
 class Point(Figure):
@@ -21,8 +23,8 @@ class Point(Figure):
     def __truediv__(self, n):
         return Point(self.x / n, self.y / n)
 
-    def draw(self, game_display):
-        pygame.draw.circle(game_display, BLACK, (self.x, self.y), 1)
+    def draw(self, game_display, color):
+        draw.circle(game_display, color, (self.x, self.y), 1)
 
 
 class Circle(Point):
@@ -34,8 +36,8 @@ class Circle(Point):
     def __repr__(self):
         return '<Circle(x={0}, y={1}, r={2}) figure>'.format(self.x, self.y, self.r)
 
-    def draw(self, game_display):
-        pygame.draw.circle(game_display, BLACK, (self.x, self.y), self.r)
+    def draw(self, game_display, color):
+        draw.circle(game_display, color, (self.x, self.y), self.r)
 
 
 class Polygon(Figure):
@@ -46,9 +48,9 @@ class Polygon(Figure):
     def __repr__(self):
         return '<{0}{1} figure>'.format(self.__class__.__name__, self.points)
 
-    def draw(self, game_display):
+    def draw(self, game_display, color):
         pygame_points = [[point.x, point.y] for point in self.points]
-        pygame.draw.polygon(game_display, BLACK, pygame_points)
+        draw.polygon(game_display, color, pygame_points)
 
 
 class Line(Polygon):
@@ -66,8 +68,8 @@ class Line(Polygon):
     def __abs__(self):
         return ((self.points[0].x - self.points[1].x)**(2) + (self.points[0].y - self.points[1].y)**(2))**(.5)
 
-    def draw(self, game_display):
-        pygame.draw.line(game_display, BLACK, [self.points[0].x, self.points[0].y], [self.points[1].x, self.points[1].y])
+    def draw(self, game_display, color):
+        draw.line(game_display, color, [self.points[0].x, self.points[0].y], [self.points[1].x, self.points[1].y])
 
 
 class Triangle(Polygon):
@@ -121,43 +123,4 @@ class EquilateralPolygon(Polygon):
             angle = angles * n
             points.append(Point(center_point.x + math.cos(math.radians(angle)) * r, center_point.y + math.sin(math.radians(angle)) * r))
         super().__init__(*points)
-
-
-pygame.init()
-
-display_width = 800
-display_height = 600
-
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-
-game_display = pygame.display.set_mode((display_width, display_height))
-pygame.display.set_caption('Game')
-clock = pygame.time.Clock()
-
-
-def game_loop():
-
-    game_exit = False
-
-    while not game_exit:
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                game_exit = True
-
-        game_display.fill(WHITE)
-
-        p1 = Point(100, 200)
-        p2 = Point(200, 300)
-        p1.draw(game_display)
-        p2.draw(game_display)
-        Line(p1, p2).draw(game_display)
-        Polygon(Point(400, 500), Point(700, 550), Point(600, 400)).draw(game_display)
-
-        pygame.display.update()
-        clock.tick(60)
-
-game_loop()
-pygame.quit()
 
