@@ -21,8 +21,8 @@ class Point(Figure):
     def __truediv__(self, n):
         return Point(self.x / n, self.y / n)
 
-    def draw(self):
-        pygame.draw.circle(gameDisplay, BLACK, (self.x, self.y), 1)
+    def draw(self, game_display):
+        pygame.draw.circle(game_display, BLACK, (self.x, self.y), 1)
 
 
 class Circle(Point):
@@ -34,8 +34,8 @@ class Circle(Point):
     def __repr__(self):
         return '<Circle(x={0}, y={1}, r={2}) figure>'.format(self.x, self.y, self.r)
 
-    def draw(self):
-        pygame.draw.circle(gameDisplay, BLACK, (self.x, self.y), self.r)
+    def draw(self, game_display):
+        pygame.draw.circle(game_display, BLACK, (self.x, self.y), self.r)
 
 
 class Polygon(Figure):
@@ -46,12 +46,9 @@ class Polygon(Figure):
     def __repr__(self):
         return '<{0}{1} figure>'.format(self.__class__.__name__, self.points)
 
-    def draw(self):
-        point = [[0 for j in range(2)] for i in range(len(self.points))]
-        for i in range(len(self.points)):
-            point[i][0] = self.points[i].x
-            point[i][1] = self.points[i].y
-        pygame.draw.polygon(gameDisplay, BLACK, [point[i] for i in range(len(point))])
+    def draw(self, game_display):
+        pygame_points = [[point.x, point.y] for point in self.points]
+        pygame.draw.polygon(game_display, BLACK, pygame_points)
 
 
 class Line(Polygon):
@@ -69,8 +66,8 @@ class Line(Polygon):
     def __abs__(self):
         return ((self.points[0].x - self.points[1].x)**(2) + (self.points[0].y - self.points[1].y)**(2))**(.5)
 
-    def draw(self):
-        pygame.draw.line(gameDisplay, BLACK, [self.points[0].x, self.points[0].y], [self.points[1].x, self.points[1].y])
+    def draw(self, game_display):
+        pygame.draw.line(game_display, BLACK, [self.points[0].x, self.points[0].y], [self.points[1].x, self.points[1].y])
 
 
 class Triangle(Polygon):
@@ -134,28 +131,29 @@ display_height = 600
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
-gameDisplay = pygame.display.set_mode((display_width, display_height))
+game_display = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Game')
 clock = pygame.time.Clock()
 
 
 def game_loop():
 
-    gameExit = False
+    game_exit = False
 
-    while not gameExit:
+    while not game_exit:
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                gameExit = True
+                game_exit = True
 
-        gameDisplay.fill(WHITE)
+        game_display.fill(WHITE)
 
         p1 = Point(100, 200)
         p2 = Point(200, 300)
-        p1.draw()
-        p2.draw()
-        Line(p1, p2).draw()
+        p1.draw(game_display)
+        p2.draw(game_display)
+        Line(p1, p2).draw(game_display)
+        Polygon(Point(400, 500), Point(700, 550), Point(600, 400)).draw(game_display)
 
         pygame.display.update()
         clock.tick(60)
