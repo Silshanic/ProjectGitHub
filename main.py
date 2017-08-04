@@ -23,16 +23,17 @@ def game_loop():
 
         game_display.fill(WHITE)
 
-        p1 = Point(100, 200)
-        p2 = Point(200, 300)
-        line = Line(p1, p2)
-        line.color = RED
-        line.draw(game_display)
+        p1 = Point(100, 200, CYAN)
+        p2 = Point(200, 300, BLUE)
+        Line(p1, p2, color=GREEN).draw(game_display)
         p1.draw(game_display)
         p2.draw(game_display)
-        polygon = Polygon(Point(400, 500), Point(700, 550), Point(600, 400))
-        polygon.color = CYAN
-        polygon.draw(game_display)
+        Polygon(Point(400, 500), Point(700, 550), Point(600, 400)).draw(game_display)
+        Circle(500, 200, 50, RED).draw(game_display)
+        Rectangle(Point(0, 0), Point(50, 100), color=BLUE).draw(game_display)
+        Triangle(Point(400, 0), Point(500, 0), Point(450, 100), color=CYAN).draw(game_display)
+        EquilateralPolygon(Point(100, 450), 50, 7, color=PINK).draw(game_display)
+        Square(Point(150, 150), 50, color=YELLOW).draw(game_display)
 
         pygame.display.update()
         clock.tick(60)
