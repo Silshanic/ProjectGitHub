@@ -1,10 +1,19 @@
 import math
 from pygame import draw
 
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+YELLOW = (255, 255, 0)
+PINK = (255, 0, 255)
+CYAN = (0, 255, 255)
+
 
 class Figure:
 
-    def draw(self, game_display, color):
+    def draw(self, game_display):
         raise NotImplementedError
 
 
@@ -13,6 +22,7 @@ class Point(Figure):
     def __init__(self, x, y):
         self.x = round(x)
         self.y = round(y)
+        self.color = BLACK
 
     def __repr__(self):
         return '<Point(x={0}, y={1}) figure>'.format(self.x, self.y)
@@ -23,8 +33,8 @@ class Point(Figure):
     def __truediv__(self, n):
         return Point(self.x / n, self.y / n)
 
-    def draw(self, game_display, color):
-        draw.circle(game_display, color, (self.x, self.y), 1)
+    def draw(self, game_display):
+        draw.circle(game_display, self.color, (self.x, self.y), 1)
 
 
 class Circle(Point):
@@ -32,25 +42,27 @@ class Circle(Point):
     def __init__(self, x, y, r):
         super().__init__(x, y)
         self.r = r
+        self.color = BLACK
 
     def __repr__(self):
         return '<Circle(x={0}, y={1}, r={2}) figure>'.format(self.x, self.y, self.r)
 
-    def draw(self, game_display, color):
-        draw.circle(game_display, color, (self.x, self.y), self.r)
+    def draw(self, game_display):
+        draw.circle(game_display, self.color, (self.x, self.y), self.r)
 
 
 class Polygon(Figure):
 
     def __init__(self, *points):
         self.points = points
+        self.color = BLACK
 
     def __repr__(self):
         return '<{0}{1} figure>'.format(self.__class__.__name__, self.points)
 
-    def draw(self, game_display, color):
+    def draw(self, game_display):
         pygame_points = [[point.x, point.y] for point in self.points]
-        draw.polygon(game_display, color, pygame_points)
+        draw.polygon(game_display, self.color, pygame_points)
 
 
 class Line(Polygon):
@@ -58,6 +70,7 @@ class Line(Polygon):
     def __init__(self, p1, p2):
         super().__init__(p1, p2)
         self.center = Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2)
+        self.color = BLACK
 
     def __add__(self, v):
         return Line(self.points[0], Point(self.points[0].x + self.points[1].x - self.points[0].x + v.points[1].x - v.points[0].x, self.points[0].y + self.points[1].y - self.points[0].y + v.points[1].y - v.points[0].y))
@@ -68,14 +81,15 @@ class Line(Polygon):
     def __abs__(self):
         return ((self.points[0].x - self.points[1].x)**(2) + (self.points[0].y - self.points[1].y)**(2))**(.5)
 
-    def draw(self, game_display, color):
-        draw.line(game_display, color, [self.points[0].x, self.points[0].y], [self.points[1].x, self.points[1].y])
+    def draw(self, game_display):
+        draw.line(game_display, self.color, [self.points[0].x, self.points[0].y], [self.points[1].x, self.points[1].y])
 
 
 class Triangle(Polygon):
 
     def __init__(self, p1, p2, p3):
         super().__init__(p1, p2, p3)
+        self.color = BLACK
 
 
 class IsoscelesTriangle(Triangle):
@@ -96,6 +110,7 @@ class IsoscelesTriangle(Triangle):
             else:
                 p3 = Point(center.x - c.x, center.y + c.y)
         super().__init__(p1, p2, p3)
+        self.color = BLACK
 
 
 class Rectangle(Polygon):
@@ -104,6 +119,7 @@ class Rectangle(Polygon):
         l_u = Point(l_d.x, r_u.y)
         r_d = Point(r_u.x, l_d.y)
         super().__init__(l_d, l_u, r_u, r_d)
+        self.color = BLACK
 
 
 class Square(Rectangle):
@@ -112,6 +128,7 @@ class Square(Rectangle):
         l_d = p
         r_u = Point(p.x + l, p.y + l)
         super().__init__(l_d, r_u)
+        self.color = BLACK
 
 
 class EquilateralPolygon(Polygon):
@@ -123,4 +140,5 @@ class EquilateralPolygon(Polygon):
             angle = angles * n
             points.append(Point(center_point.x + math.cos(math.radians(angle)) * r, center_point.y + math.sin(math.radians(angle)) * r))
         super().__init__(*points)
+        self.color = BLACK
 
