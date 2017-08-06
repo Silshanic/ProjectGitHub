@@ -23,9 +23,9 @@ class Figure:
 class Point(Figure):
 
     def __init__(self, x, y, color=BLACK):
-        super().__init__(color)
         self.x = round(x)
         self.y = round(y)
+        super().__init__(color)
 
     def __repr__(self):
         return '<Point(x={0}, y={1}) figure>'.format(self.x, self.y)
@@ -36,6 +36,18 @@ class Point(Figure):
     def __truediv__(self, n):
         return Point(self.x / n, self.y / n)
 
+    def __eq__(self, p):
+        if self.x == p.x and self.y == p.y:
+            return True
+        else:
+            return False
+
+    def __ne__(self, p):
+        if self.x != p.x or self.y != p.y:
+            return True
+        else:
+            return False
+
     def draw(self, game_display):
         draw.circle(game_display, self.color, (self.x, self.y), 1)
 
@@ -43,8 +55,8 @@ class Point(Figure):
 class Circle(Point):
 
     def __init__(self, x, y, r, color=BLACK):
-        super().__init__(x, y, color)
         self.r = r
+        super().__init__(x, y, color)
 
     def __repr__(self):
         return '<Circle(x={0}, y={1}, r={2}) figure>'.format(self.x, self.y, self.r)
@@ -56,8 +68,8 @@ class Circle(Point):
 class Polygon(Figure):
 
     def __init__(self, *points, color=BLACK):
-        super().__init__(color)
         self.points = points
+        super().__init__(color)
 
     def __repr__(self):
         return '<{0}{1} figure>'.format(self.__class__.__name__, self.points)
@@ -70,17 +82,35 @@ class Polygon(Figure):
 class Line(Polygon):
 
     def __init__(self, p1, p2, color=BLACK):
-        super().__init__(p1, p2, color=color)
         self.center = Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2)
+        super().__init__(p1, p2, color=color)
 
     def __add__(self, v):
-        return Line(self.points[0], Point(self.points[0].x + self.points[1].x - self.points[0].x + v.points[1].x - v.points[0].x, self.points[0].y + self.points[1].y - self.points[0].y + v.points[1].y - v.points[0].y))
+        return Line(self.points[0], Point(self.points[0].x + self.points[1].x - self.points[0].x + v.points[1].x -
+                                          v.points[0].x, self.points[0].y + self.points[1].y - self.points[0].y +
+                                          v.points[1].y - v.points[0].y))
 
     def __sub__(self, v):
-        return Line(self.points[0], Point(self.points[0].x + self.points[1].x - self.points[0].x - v.points[1].x + v.points[0].x, self.points[0].y + self.points[1].y - self.points[0].y - v.points[1].y + v.points[0].y))
+        return Line(self.points[0], Point(self.points[0].x + self.points[1].x - self.points[0].x - v.points[1].x +
+                                          v.points[0].x, self.points[0].y + self.points[1].y - self.points[0].y -
+                                          v.points[1].y + v.points[0].y))
 
     def __abs__(self):
         return ((self.points[0].x - self.points[1].x)**(2) + (self.points[0].y - self.points[1].y)**(2))**(.5)
+
+    def __eq__(self, l):
+        if self.points[0].x == l.points[0].x and self.points[0].y == l.points[0].y and \
+                self.points[1].x == l.points[1].x and self.points[1].y == l.points[1].y:
+            return True
+        else:
+            return False
+
+    def __ne__(self, l):
+        if self.points[0].x != l.points[0].x or self.points[0].y != l.points[0].y or \
+                self.points[1].x != l.points[1].x or self.points[1].y != l.points[1].y:
+            return True
+        else:
+            return False
 
     def draw(self, game_display):
         draw.line(game_display, self.color, [self.points[0].x, self.points[0].y], [self.points[1].x, self.points[1].y])
@@ -135,5 +165,6 @@ class EquilateralPolygon(Polygon):
         angles = 360 / vertices
         for n in range(vertices):
             angle = angles * n
-            points.append(Point(center_point.x + math.cos(math.radians(angle)) * r, center_point.y + math.sin(math.radians(angle)) * r))
+            points.append(Point(center_point.x + math.cos(math.radians(angle)) * r, center_point.y +
+                                math.sin(math.radians(angle)) * r))
         super().__init__(*points, color=color)
