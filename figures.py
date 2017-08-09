@@ -37,16 +37,7 @@ class Point(Figure):
         return Point(self.x / n, self.y / n)
 
     def __eq__(self, p):
-        if self.x == p.x and self.y == p.y:
-            return True
-        else:
-            return False
-
-    def __ne__(self, p):
-        if self.x != p.x or self.y != p.y:
-            return True
-        else:
-            return False
+        return self.x == p.x and self.y == p.y
 
     def draw(self, game_display):
         draw.circle(game_display, self.color, (self.x, self.y), 1)
@@ -55,7 +46,7 @@ class Point(Figure):
 class Circle(Point):
 
     def __init__(self, x, y, r, color=BLACK):
-        self.r = r
+        self.r = round(r)
         super().__init__(x, y, color)
 
     def __repr__(self):
@@ -96,21 +87,10 @@ class Line(Polygon):
                                           v.points[1].y + v.points[0].y))
 
     def __abs__(self):
-        return ((self.points[0].x - self.points[1].x)**(2) + (self.points[0].y - self.points[1].y)**(2))**(.5)
+        return ((self.points[0].x - self.points[1].x)**2 + (self.points[0].y - self.points[1].y)**2)**.5
 
     def __eq__(self, l):
-        if self.points[0].x == l.points[0].x and self.points[0].y == l.points[0].y and \
-                self.points[1].x == l.points[1].x and self.points[1].y == l.points[1].y:
-            return True
-        else:
-            return False
-
-    def __ne__(self, l):
-        if self.points[0].x != l.points[0].x or self.points[0].y != l.points[0].y or \
-                self.points[1].x != l.points[1].x or self.points[1].y != l.points[1].y:
-            return True
-        else:
-            return False
+        return self.points[0] == l.points[0] and self.points[1] == l.points[1]
 
     def draw(self, game_display):
         draw.line(game_display, self.color, [self.points[0].x, self.points[0].y], [self.points[1].x, self.points[1].y])
@@ -127,14 +107,14 @@ class IsoscelesTriangle(Triangle):
     def __init__(self, p1, p2, l, color=BLACK):
         center = Line(p1, p2).center
         ah = abs(Line(p1, center))
-        ch = ((l*l) - (ah * ah))**(.5)
+        ch = ((l*l) - (ah * ah))**.5
         if p1.x == p2.x:
             p3 = Point(center.x + ch, center.y)
         elif p1.y == p2.y:
             p3 = Point(center.x, center.y + ch)
         else:
             sin = abs((p1.y - p2.y) / 2) / ah
-            c = Point(sin * ch, ((ch * ch) - ((sin * ch) ** 2))**(.5))
+            c = Point(sin * ch, ((ch * ch) - ((sin * ch) ** 2))**.5)
             if p1.y > p2.y:
                 p3 = Point(center.x + c.x, center.y + c.y)
             else:
