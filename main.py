@@ -11,6 +11,16 @@ pygame.display.set_caption('Game')
 clock = pygame.time.Clock()
 
 
+def character(x, y):
+    Circle(x + 25, y + 25, 25, PINK).draw(game_display)
+    Circle(x + 25, y + 25, 20, SKIN).draw(game_display)
+    Line(Point(x + 25, y + 50), Point(x + 25, y + 100), PINK).draw(game_display)
+    Line(Point(x + 25, y + 50), Point(x, y + 75), PINK).draw(game_display)
+    Line(Point(x + 25, y + 50), Point(x + 50, y + 75), PINK).draw(game_display)
+    Line(Point(x + 25, y + 100), Point(x, y + 150), PINK).draw(game_display)
+    Line(Point(x + 25, y + 100), Point(x + 50, y + 150), PINK).draw(game_display)
+
+
 def game_loop():
 
     game_exit = False
@@ -35,6 +45,7 @@ def game_loop():
         EquilateralPolygon(Point(100, 450), 50, 7, color=PINK).draw(game_display)
         Square(Point(150, 150), 50, color=YELLOW).draw(game_display)
         IsoscelesTriangle(Point(350, 400), Point(400, 400), 70, color=GREEN).draw(game_display)
+        character(300, 300)
 
         pygame.display.update()
         clock.tick(60)

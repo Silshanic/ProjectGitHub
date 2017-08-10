@@ -68,7 +68,8 @@ class TestFigures:
             figures.Circle(x, y, r)
 
     @pytest.mark.parametrize('p1,p2,p3,p4', [
-        (figures.Point(0, 0), figures.Point(1, 1), figures.Point(2, 1), figures.Point(2, 0))
+        (figures.Point(0, 0), figures.Point(1, 1), figures.Point(2, 1), figures.Point(2, 0)),
+        (figures.Point(400, 500), figures.Point(700, 550), figures.Point(600, 400), figures.Point(500, 550))
     ])
     def test_polygon_points(self, p1, p2, p3, p4):
         polygon = figures.Polygon(p1, p2, p3, p4)
