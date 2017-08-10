@@ -60,6 +60,13 @@ class TestFigures:
         circle = figures.Circle(x, y, r)
         assert (circle.x, circle.y, circle.r) == (exp_x, exp_y, exp_r)
 
+    @pytest.mark.parametrize('x,y,r', [
+        (1, 1, 0.5)
+    ])
+    def test_circle_radius(self, x, y, r):
+        with pytest.raises(ValueError):
+            figures.Circle(x, y, r)
+
     @pytest.mark.parametrize('p1,p2,p3,p4', [
         (figures.Point(0, 0), figures.Point(1, 1), figures.Point(2, 1), figures.Point(2, 0))
     ])
@@ -67,6 +74,13 @@ class TestFigures:
         polygon = figures.Polygon(p1, p2, p3, p4)
         assert polygon.points[0] == p1 and polygon.points[1] == p2 and polygon.points[2] == p3 and \
             polygon.points[3] == p4
+
+    @pytest.mark.parametrize('p1,p2', [
+        (figures.Point(1, 1), figures.Point(2, 3))
+    ])
+    def test_polygon_vertices(self, p1, p2):
+        with pytest.raises(ValueError):
+            figures.Polygon(p1, p2)
 
     @pytest.mark.parametrize('line,center', [
         (figures.Line(figures.Point(1, 0), figures.Point(7, 4)), figures.Point(4, 2))
@@ -109,6 +123,15 @@ class TestFigures:
         triangle = figures.Triangle(p1, p2, p3)
         assert triangle.points[0] == p1 and triangle.points[1] == p2 and triangle.points[2] == p3
 
+    @pytest.mark.parametrize('p1,p2,p3', [
+        (figures.Point(0, 0), figures.Point(2, 0), figures.Point(4, 0)),
+        (figures.Point(0, 0), figures.Point(0, 2), figures.Point(0, 4)),
+        (figures.Point(1, 2), figures.Point(2, 4), figures.Point(4, 8))
+    ])
+    def test_triangle_error(self, p1, p2, p3):
+        with pytest.raises(ValueError):
+            figures.Triangle(p1, p2, p3)
+
     @pytest.mark.parametrize('p1,p2,l,p3', [
         (figures.Point(0, 0), figures.Point(6, 0), 5, figures.Point(3, 4)),
         (figures.Point(0, 0), figures.Point(0, 6), 5, figures.Point(4, 3)),
@@ -117,19 +140,28 @@ class TestFigures:
     def test_isosceles_triangle_point3(self, p1, p2, l, p3):
         assert figures.IsoscelesTriangle(p1, p2, l).points[2] == p3
 
-    @pytest.mark.parametrize('l_d,r_u,exp_l_u,exp_r_d', [
-        (figures.Point(0, 0), figures.Point(4, 2), figures.Point(0, 2), figures.Point(4, 0))
+    @pytest.mark.parametrize('p1,p2,l', [
+        (figures.Point(0, 0), figures.Point(6, 0), 3)
     ])
-    def test_rectangle_points(self, l_d, r_u, exp_l_u, exp_r_d):
-        rectangle = figures.Rectangle(l_d, r_u)
-        assert rectangle.points[1] == exp_l_u and rectangle.points[3] == exp_r_d
+    def test_isosceles_triangle_length_error(self, p1, p2, l):
+        with pytest.raises(ValueError):
+            figures.IsoscelesTriangle(p1, p2, l)
 
-    @pytest.mark.parametrize('point,length,exp_l_u,exp_r_u,exp_r_d', [
-        (figures.Point(0, 0), 5, figures.Point(0, 5), figures.Point(5, 5), figures.Point(5, 0))
+    @pytest.mark.parametrize('l_d,r_u,exp_points', [
+        (figures.Point(0, 0), figures.Point(4, 2),
+         (figures.Point(0, 0), figures.Point(0, 2), figures.Point(4, 2), figures.Point(4, 0)))
     ])
-    def test_square_points(self, point, length, exp_l_u, exp_r_u, exp_r_d):
+    def test_rectangle_points(self, l_d, r_u, exp_points):
+        rectangle = figures.Rectangle(l_d, r_u)
+        assert rectangle.points == exp_points
+
+    @pytest.mark.parametrize('point,length,exp_points', [
+        (figures.Point(0, 0), 5,
+         (figures.Point(0, 0), figures.Point(0, 5), figures.Point(5, 5), figures.Point(5, 0)))
+    ])
+    def test_square_points(self, point, length, exp_points):
         square = figures.Square(point, length)
-        assert square.points[1] == exp_l_u and square.points[2] == exp_r_u and square.points[3] == exp_r_d
+        assert square.points == exp_points
 
     @pytest.mark.parametrize('center_point,radius,vertices,exp_points', [
         (figures.Point(0, 0), 1, 4,
@@ -138,3 +170,11 @@ class TestFigures:
     def test_equilateral_polygon_points(self, center_point, radius, vertices, exp_points):
         eq_polygon = figures.EquilateralPolygon(center_point, radius, vertices)
         assert eq_polygon.points == exp_points
+
+    @pytest.mark.parametrize('center_point,radius,vertices', [
+        (figures.Point(0, 0), 1, 1),
+        (figures.Point(1, 1), 0, 4)
+    ])
+    def test_equilateral_polygon_error(self, center_point, radius, vertices):
+        with pytest.raises(ValueError):
+            figures.EquilateralPolygon(center_point, radius, vertices)

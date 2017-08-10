@@ -34,6 +34,7 @@ def game_loop():
         Triangle(Point(400, 0), Point(500, 0), Point(450, 100), color=CYAN).draw(game_display)
         EquilateralPolygon(Point(100, 450), 50, 7, color=PINK).draw(game_display)
         Square(Point(150, 150), 50, color=YELLOW).draw(game_display)
+        IsoscelesTriangle(Point(350, 400), Point(400, 400), 70, color=GREEN).draw(game_display)
 
         pygame.display.update()
         clock.tick(60)

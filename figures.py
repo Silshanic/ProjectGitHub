@@ -47,6 +47,8 @@ class Circle(Point):
 
     def __init__(self, x, y, r, color=BLACK):
         self.r = round(r)
+        if self.r <= 0:
+            raise ValueError('Radius must be 1 or higher')
         super().__init__(x, y, color)
 
     def __repr__(self):
@@ -59,6 +61,8 @@ class Circle(Point):
 class Polygon(Figure):
 
     def __init__(self, *points, color=BLACK):
+        if len(points) < 3:
+            raise ValueError('Polygon must have 3 or more vertices')
         self.points = points
         super().__init__(color)
 
@@ -70,35 +74,35 @@ class Polygon(Figure):
         draw.polygon(game_display, self.color, pygame_points)
 
 
-class Line(Polygon):
+class Line(Figure):
 
     def __init__(self, p1, p2, color=BLACK):
+        self.p1 = p1
+        self.p2 = p2
         self.center = Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2)
-        super().__init__(p1, p2, color=color)
+        super().__init__(color=color)
 
     def __add__(self, v):
-        return Line(self.points[0], Point(self.points[0].x + self.points[1].x - self.points[0].x + v.points[1].x -
-                                          v.points[0].x, self.points[0].y + self.points[1].y - self.points[0].y +
-                                          v.points[1].y - v.points[0].y))
+        return Line(self.p1, Point(self.p2.x + v.p2.x - v.p1.x, self.p2.y + v.p2.y - v.p1.y))
 
     def __sub__(self, v):
-        return Line(self.points[0], Point(self.points[0].x + self.points[1].x - self.points[0].x - v.points[1].x +
-                                          v.points[0].x, self.points[0].y + self.points[1].y - self.points[0].y -
-                                          v.points[1].y + v.points[0].y))
+        return Line(self.p1, Point(self.p2.x - v.p2.x + v.p1.x, self.p2.y - v.p2.y + v.p1.y))
 
     def __abs__(self):
-        return ((self.points[0].x - self.points[1].x)**2 + (self.points[0].y - self.points[1].y)**2)**.5
+        return ((self.p1.x - self.p2.x)**2 + (self.p1.y - self.p2.y)**2)**.5
 
     def __eq__(self, l):
-        return self.points[0] == l.points[0] and self.points[1] == l.points[1]
+        return self.p1 == l.p1 and self.p2 == l.p2
 
     def draw(self, game_display):
-        draw.line(game_display, self.color, [self.points[0].x, self.points[0].y], [self.points[1].x, self.points[1].y])
+        draw.line(game_display, self.color, [self.p1.x, self.p1.y], [self.p2.x, self.p2.y])
 
 
 class Triangle(Polygon):
 
     def __init__(self, p1, p2, p3, color=BLACK):
+        if (p2.y-p1.y)/abs(Line(p2, p1)) == (p3.y-p2.y)/abs(Line(p3, p2)):
+            raise ValueError('Points must not be on the same line')
         super().__init__(p1, p2, p3, color=color)
 
 
@@ -107,6 +111,8 @@ class IsoscelesTriangle(Triangle):
     def __init__(self, p1, p2, l, color=BLACK):
         center = Line(p1, p2).center
         ah = abs(Line(p1, center))
+        if l <= ah:
+            raise ValueError('Side length must be bigger than base length')
         ch = ((l*l) - (ah * ah))**.5
         if p1.x == p2.x:
             p3 = Point(center.x + ch, center.y)
@@ -141,10 +147,14 @@ class Square(Rectangle):
 class EquilateralPolygon(Polygon):
 
     def __init__(self, center_point, r, vertices, color=BLACK):
+        if r <= 0:
+            raise ValueError('Radius must be 1 or higher')
+        if vertices < 3:
+            raise ValueError('Polygon must have 3 or more vertices')
         points = []
         angles = 360 / vertices
         for n in range(vertices):
             angle = angles * n
-            points.append(Point(center_point.x + math.cos(math.radians(angle)) * r, center_point.y +
-                                math.sin(math.radians(angle)) * r))
+            points.append(Point(center_point.x + math.cos(math.radians(angle)) * r,
+                                center_point.y + math.sin(math.radians(angle)) * r))
         super().__init__(*points, color=color)
