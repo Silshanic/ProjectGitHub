@@ -12,5 +12,5 @@ class Character(figures.Drawable):
                            'r_leg': figures.Line(figures.Point(x + 25, y + 100), figures.Point(x + 50, y + 150))}
 
     def draw(self, game_display):
-        for key in self.body_parts:
-            self.body_parts[key].draw(game_display)
+        for body_part in self.body_parts.values():
+            body_part.draw(game_display)

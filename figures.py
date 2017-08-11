@@ -16,17 +16,17 @@ class Figure(Drawable):
             color = colors.BLACK
         self.color = color
 
-    def draw(self, game_display):
-        raise NotImplementedError
-
 
 class Point(Figure):
 
     def __init__(self, x, y, color=None):
         self.x = round(x)
         self.y = round(y)
-        self.coords = (self.x, self.y)
         super().__init__(color)
+
+    @property
+    def coords(self):
+        return self.x, self.y
 
     def copy(self):
         return Point(self.x, self.y)
@@ -58,6 +58,9 @@ class Circle(Point):
     def __repr__(self):
         return '<Circle(x={0}, y={1}, r={2}) figure>'.format(self.x, self.y, self.r)
 
+    def copy(self):
+        raise NotImplementedError
+
     def draw(self, game_display):
         pygame.draw.circle(game_display, self.color, self.coords, self.r)
 
@@ -82,8 +85,11 @@ class Line(Figure):
     def __init__(self, p1, p2, color=None):
         self.p1 = p1
         self.p2 = p2
-        self.center = Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2)
         super().__init__(color=color)
+
+    @property
+    def center(self):
+        return Point((self.p1.x + self.p2.x) / 2, (self.p1.y + self.p2.y) / 2)
 
     def __add__(self, v):
         return Line(self.p1.copy(), Point(self.p2.x + v.p2.x - v.p1.x, self.p2.y + v.p2.y - v.p1.y))
