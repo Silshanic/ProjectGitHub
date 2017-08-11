@@ -1,4 +1,5 @@
 import figures
+import colors
 import pytest
 
 
@@ -6,13 +7,13 @@ class TestFigures:
     def test_base_figure(self):
         with pytest.raises(NotImplementedError):  # проверяем, что draw у
             # Figure возбуждает исключение
-            figures.Figure(None).draw(figures.BLACK)
+            figures.Figure(None).draw(colors.BLACK)
 
     # pytest.mark.parametrize позволяет вызвать тестовую функцию, перебирая
     # значение аргументов. Перебираем цвета, смотрим, что они устанавливаются
     # правильно
     @pytest.mark.parametrize('color', [
-        figures.BLACK, figures.CYAN, figures.RED, figures.GREEN,
+        colors.BLACK, colors.CYAN, colors.RED, colors.GREEN,
     ])
     def test_base_figure_default_color(self, color):
         base_figure = figures.Figure(color)
@@ -73,8 +74,7 @@ class TestFigures:
     ])
     def test_polygon_points(self, p1, p2, p3, p4):
         polygon = figures.Polygon(p1, p2, p3, p4)
-        assert polygon.points[0] == p1 and polygon.points[1] == p2 and polygon.points[2] == p3 and \
-            polygon.points[3] == p4
+        assert polygon.points == (p1, p2, p3, p4)
 
     @pytest.mark.parametrize('p1,p2', [
         (figures.Point(1, 1), figures.Point(2, 3))
@@ -127,7 +127,8 @@ class TestFigures:
     @pytest.mark.parametrize('p1,p2,p3', [
         (figures.Point(0, 0), figures.Point(2, 0), figures.Point(4, 0)),
         (figures.Point(0, 0), figures.Point(0, 2), figures.Point(0, 4)),
-        (figures.Point(1, 2), figures.Point(2, 4), figures.Point(4, 8))
+        (figures.Point(1, 2), figures.Point(2, 4), figures.Point(4, 8)),
+        (figures.Point(2, 2), figures.Point(4, 4), figures.Point(1, 1))
     ])
     def test_triangle_error(self, p1, p2, p3):
         with pytest.raises(ValueError):

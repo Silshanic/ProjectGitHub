@@ -1,5 +1,7 @@
 from figures import *
-import pygame
+from character import *
+import colors
+
 
 pygame.init()
 
@@ -9,16 +11,6 @@ display_height = 600
 game_display = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Game')
 clock = pygame.time.Clock()
-
-
-def character(x, y):
-    Circle(x + 25, y + 25, 25, PINK).draw(game_display)
-    Circle(x + 25, y + 25, 20, SKIN).draw(game_display)
-    Line(Point(x + 25, y + 50), Point(x + 25, y + 100), PINK).draw(game_display)
-    Line(Point(x + 25, y + 50), Point(x, y + 75), PINK).draw(game_display)
-    Line(Point(x + 25, y + 50), Point(x + 50, y + 75), PINK).draw(game_display)
-    Line(Point(x + 25, y + 100), Point(x, y + 150), PINK).draw(game_display)
-    Line(Point(x + 25, y + 100), Point(x + 50, y + 150), PINK).draw(game_display)
 
 
 def game_loop():
@@ -31,21 +23,21 @@ def game_loop():
             if event.type == pygame.QUIT:
                 game_exit = True
 
-        game_display.fill(WHITE)
+        game_display.fill(colors.WHITE)
 
-        p1 = Point(100, 200, CYAN)
-        p2 = Point(200, 300, BLUE)
-        Line(p1, p2, color=GREEN).draw(game_display)
+        p1 = Point(100, 200, colors.CYAN)
+        p2 = Point(200, 300, colors.BLUE)
+        Line(p1, p2, color=colors.GREEN).draw(game_display)
         p1.draw(game_display)
         p2.draw(game_display)
         Polygon(Point(400, 500), Point(700, 550), Point(600, 400)).draw(game_display)
-        Circle(500, 200, 50, RED).draw(game_display)
-        Rectangle(Point(0, 0), Point(50, 100), color=BLUE).draw(game_display)
-        Triangle(Point(400, 0), Point(500, 0), Point(450, 100), color=CYAN).draw(game_display)
-        EquilateralPolygon(Point(100, 450), 50, 7, color=PINK).draw(game_display)
-        Square(Point(150, 150), 50, color=YELLOW).draw(game_display)
-        IsoscelesTriangle(Point(350, 400), Point(400, 400), 70, color=GREEN).draw(game_display)
-        character(300, 300)
+        Circle(500, 200, 50, colors.RED).draw(game_display)
+        Rectangle(Point(0, 0), Point(50, 100), color=colors.BLUE).draw(game_display)
+        Triangle(Point(400, 0), Point(500, 0), Point(450, 100), color=colors.CYAN).draw(game_display)
+        EquilateralPolygon(Point(100, 450), 50, 7, color=colors.PINK).draw(game_display)
+        Square(Point(150, 150), 50, color=colors.YELLOW).draw(game_display)
+        IsoscelesTriangle(Point(350, 400), Point(400, 400), 70, color=colors.GREEN).draw(game_display)
+        Character(300, 300).draw(game_display)
 
         pygame.display.update()
         clock.tick(60)
