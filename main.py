@@ -38,6 +38,7 @@ def game_loop():
         Square(Point(150, 150), 50, color=colors.YELLOW).draw(game_display)
         IsoscelesTriangle(Point(350, 400), Point(400, 400), 70, color=colors.GREEN).draw(game_display)
         Character(300, 300).draw(game_display)
+        Character(300, 300).wave_arms(game_display)
 
         pygame.display.update()
         clock.tick(60)

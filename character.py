@@ -1,4 +1,7 @@
 import figures
+import pygame
+import time
+import colors
 
 
 class Character(figures.Drawable):
@@ -14,3 +17,37 @@ class Character(figures.Drawable):
     def draw(self, game_display):
         for body_part in self.body_parts.values():
             body_part.draw(game_display)
+
+    def wave_arms(self, game_display):
+        l_arm_up = self.body_parts['l_arm'].p1.y
+        l_arm_down = self.body_parts['l_arm'].p2.y
+        while self.body_parts['l_arm'].p2.y != l_arm_up:
+            self.body_parts['l_arm'].color = colors.WHITE
+            self.body_parts['r_arm'].color = colors.WHITE
+            self.body_parts['l_arm'].draw(game_display)
+            self.body_parts['r_arm'].draw(game_display)
+            self.body_parts['l_arm'].color = colors.BLACK
+            self.body_parts['r_arm'].color = colors.BLACK
+            self.body_parts['l_arm'].p2.y += -1
+            self.body_parts['l_arm'].p2.x += -0.314
+            self.body_parts['r_arm'].p2.y += -1
+            self.body_parts['r_arm'].p2.x += 0.314
+            self.body_parts['l_arm'].draw(game_display)
+            self.body_parts['r_arm'].draw(game_display)
+            pygame.display.update()
+            time.sleep(0.005)
+        while self.body_parts['l_arm'].p2.y != l_arm_down:
+            self.body_parts['l_arm'].color = colors.WHITE
+            self.body_parts['r_arm'].color = colors.WHITE
+            self.body_parts['l_arm'].draw(game_display)
+            self.body_parts['r_arm'].draw(game_display)
+            self.body_parts['l_arm'].color = colors.BLACK
+            self.body_parts['r_arm'].color = colors.BLACK
+            self.body_parts['l_arm'].p2.y += 1
+            self.body_parts['l_arm'].p2.x += 0.314
+            self.body_parts['r_arm'].p2.y += 1
+            self.body_parts['r_arm'].p2.x += -0.314
+            self.body_parts['l_arm'].draw(game_display)
+            self.body_parts['r_arm'].draw(game_display)
+            pygame.display.update()
+            time.sleep(0.005)

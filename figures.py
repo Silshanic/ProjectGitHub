@@ -87,6 +87,9 @@ class Line(Figure):
         self.p2 = p2
         super().__init__(color=color)
 
+    def __repr__(self):
+        return '<Line({0}, {1}) figure>'.format(self.p1, self.p2)
+
     @property
     def center(self):
         return Point((self.p1.x + self.p2.x) / 2, (self.p1.y + self.p2.y) / 2)
