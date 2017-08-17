@@ -17,6 +17,8 @@ def game_loop():
 
     game_exit = False
 
+    char = Character(300, 300)
+
     while not game_exit:
 
         for event in pygame.event.get():
@@ -37,8 +39,7 @@ def game_loop():
         EquilateralPolygon(Point(100, 450), 50, 7, color=colors.PINK).draw(game_display)
         Square(Point(150, 150), 50, color=colors.YELLOW).draw(game_display)
         IsoscelesTriangle(Point(350, 400), Point(400, 400), 70, color=colors.GREEN).draw(game_display)
-        Character(300, 300).draw(game_display)
-        Character(300, 300).wave_arms(game_display)
+        char.wave_arms(game_display)
 
         pygame.display.update()
         clock.tick(60)
