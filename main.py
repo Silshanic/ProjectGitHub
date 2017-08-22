@@ -18,6 +18,7 @@ def game_loop():
     game_exit = False
 
     char = Character(300, 300)
+    snake = Snake(5)
 
     while not game_exit:
 
@@ -40,6 +41,20 @@ def game_loop():
         Square(Point(150, 150), 50, color=colors.YELLOW).draw(game_display)
         IsoscelesTriangle(Point(350, 400), Point(400, 400), 70, color=colors.GREEN).draw(game_display)
         char.wave_arms(game_display)
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT:
+                snake.move_right()
+            elif event.key == pygame.K_LEFT:
+                snake.move_left()
+            elif event.key == pygame.K_UP:
+                snake.move_up()
+            elif event.key == pygame.K_DOWN:
+                snake.move_down()
+            if event.key == pygame.K_ESCAPE:
+                game_exit = True
+        snake.update()
+        snake.draw(game_display)
 
         pygame.display.update()
         clock.tick(60)
