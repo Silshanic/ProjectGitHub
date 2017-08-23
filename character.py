@@ -41,8 +41,8 @@ class Snake(figures.Drawable):
     direction = 1
 
     # Для ограничения скорости
-    updateCountMax = 8
-    updateCount = 0
+    update_count_max = 8
+    update_count = 0
 
     def __init__(self, length):
         self.length = length
@@ -52,8 +52,8 @@ class Snake(figures.Drawable):
 
     def update(self):
 
-        self.updateCount = self.updateCount + 1
-        if self.updateCount > self.updateCountMax:
+        self.update_count = self.update_count + 1
+        if self.update_count > self.update_count_max:
 
             for i in range(self.length - 1, 0, -1):
                 self.segment_x[i] = self.segment_x[i - 1]
@@ -68,7 +68,7 @@ class Snake(figures.Drawable):
             if self.direction == 3:
                 self.segment_y[0] = self.segment_y[0] + self.step
 
-            self.updateCount = 0
+            self.update_count = 0
 
     def move_right(self):
         if self.direction != 1:
