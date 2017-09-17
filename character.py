@@ -35,10 +35,6 @@ class Character(figures.Drawable):
 
 
 class Snake(figures.Drawable):
-    segment_x = []
-    segment_y = []
-    step = 20
-    direction = 1
 
     # Для ограничения скорости
     update_count_max = 8
@@ -46,9 +42,11 @@ class Snake(figures.Drawable):
 
     def __init__(self, length):
         self.length = length
+        self.segment = []
+        self.step = 20
+        self.direction = 1
         for i in range(0, length):
-            self.segment_x.append(340 + i * self.step)
-            self.segment_y.append(280)
+            self.segment.append(figures.Point(340 + i * self.step, 280))
 
     def update(self):
 
@@ -56,17 +54,17 @@ class Snake(figures.Drawable):
         if self.update_count > self.update_count_max:
 
             for i in range(self.length - 1, 0, -1):
-                self.segment_x[i] = self.segment_x[i - 1]
-                self.segment_y[i] = self.segment_y[i - 1]
+                self.segment[i].x = self.segment[i - 1].x
+                self.segment[i].y = self.segment[i - 1].y
 
             if self.direction == 0:
-                self.segment_x[0] = self.segment_x[0] + self.step
+                self.segment[0].x = self.segment[0].x + self.step
             if self.direction == 1:
-                self.segment_x[0] = self.segment_x[0] - self.step
+                self.segment[0].x = self.segment[0].x - self.step
             if self.direction == 2:
-                self.segment_y[0] = self.segment_y[0] - self.step
+                self.segment[0].y = self.segment[0].y - self.step
             if self.direction == 3:
-                self.segment_y[0] = self.segment_y[0] + self.step
+                self.segment[0].y = self.segment[0].y + self.step
 
             self.update_count = 0
 
@@ -88,4 +86,4 @@ class Snake(figures.Drawable):
 
     def draw(self, game_display):
         for i in range(0, self.length):
-            figures.Square(figures.Point(self.segment_x[i], self.segment_y[i]), 20).draw(game_display)
+            figures.Square(self.segment[i], 20).draw(game_display)
